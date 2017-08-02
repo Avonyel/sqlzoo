@@ -98,3 +98,65 @@ SELECT yr, subject, winner
 FROM nobel
 WHERE yr BETWEEN 1980 AND 1989
 AND subject = 'Literature'
+
+SELECT * FROM nobel
+ WHERE winner IN ('Theodore Roosevelt',
+                  'Woodrow Wilson',
+                  'Jimmy Carter',
+                  'Barack Obama')
+
+SELECT winner
+  FROM nobel
+  WHERE winner LIKE 'John%';
+
+SELECT *
+  FROM nobel
+  WHERE (yr = 1980 AND subject = 'Physics')
+    OR (yr = 1984 AND subject = 'Chemistry');
+
+SELECT *
+  FROM nobel
+  WHERE yr = 1980
+    AND subject NOT IN ('Chemistry', 'Medicine');
+
+SELECT *
+  FROM nobel
+  WHERE (yr < 1910 AND subject = 'Medicine')
+    OR (yr > 2003 AND subject = 'Literature');
+
+SELECT *
+  FROM nobel
+  WHERE winner
+	LIKE 'PETER GR_NBERG';
+
+SELECT *
+  FROM nobel
+  WHERE winner = 'EUGENE O\'NEILL';
+
+SELECT winner, yr, subject
+  FROM nobel
+  WHERE winner
+    LIKE 'Sir%'
+  ORDER BY yr DESC, winner;
+
+SELECT winner, subject
+	  FROM nobel
+	 WHERE yr=1984
+	 ORDER BY subject IN ('Chemistry', 'Physics'), subject, winner;
+
+----------------------------
+--		Select from JOIN 	--
+----------------------------
+
+SELECT matchid, player
+ FROM goal
+ JOIN eteam ON eteam.id = goal.teamid
+ where teamid = 'GER';
+
+SELECT id,stadium,team1,team2
+ FROM game
+ WHERE id = 1012;
+
+SELECT player, teamid, stadium, mdate
+ FROM game JOIN goal ON (id=matchid)
+ WHERE teamid = 'GER';
