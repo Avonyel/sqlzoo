@@ -319,3 +319,69 @@ SELECT
   JOIN actor
     ON actor.id = casting.actorid
   WHERE SUM(CASE WHEN casting.ord=1 THEN 1 ELSE 0) >= 30
+
+SELECT name
+ FROM (SELECT
+    actor.name AS name, COUNT(*) as starring
+  FROM casting
+  JOIN actor
+    ON actor.id = casting.actorid
+  WHERE casting.ord = 1
+  GROUP BY actor.name) subq
+WHERE subq.starring >= 30
+ORDER BY name
+
+SELECT movie.title, COUNT(casting.actorid)
+  FROM movie
+  JOIN casting ON movie.id = casting.movieid
+  WHERE movie.yr = 1978
+  GROUP BY movie.title
+  ORDER BY COUNT(casting.actorid) DESC, movie.title
+
+SELECT DISTINCT actor.name
+  FROM actor
+  JOIN casting ON actor.id = casting.actorid
+WHERE casting.movieid IN (
+  SELECT movie.id
+    FROM movie
+    JOIN casting ON movie.id = casting.movieid
+    JOIN actor ON actor.id = casting.actorid
+  WHERE actor.name = 'Art Garfunkel')
+  AND actor.name != 'Art Garfunkel'
+
+----------------------------
+--		  SUM and COUNT 	  --
+----------------------------
+
+SELECT SUM(population)
+FROM world
+
+SELECT continent
+FROM world
+GROUP BY continent
+
+SELECT SUM(gdp)
+FROM world
+WHERE continent = 'Africa'
+
+SELECT COUNT(*)
+FROM world
+WHERE area >= 1000000
+
+SELECT SUM(population)
+FROM world
+WHERE name IN ('Estonia', 'Latvia', 'Lithuania')
+
+SELECT continent, COUNT(*)
+FROM world
+GROUP BY continent
+
+SELECT continent, COUNT(*)
+FROM world
+WHERE population >= 10000000
+GROUP BY continent
+
+SELECT continent
+FROM world
+GROUP BY continent
+HAVING SUM(population) >= 100000000
