@@ -145,7 +145,7 @@ SELECT winner, subject
 	 ORDER BY subject IN ('Chemistry', 'Physics'), subject, winner;
 
 ----------------------------
---		Select from JOIN 	--
+--		Select from JOIN 	  --
 ----------------------------
 
 SELECT matchid, player
@@ -178,7 +178,7 @@ FROM goal JOIN game ON matchid = id
 WHERE stadium = 'National Stadium, Warsaw'
 
 SELECT DISTINCT player
-  FROM game JOIN goal ON matchid = id 
+  FROM game JOIN goal ON matchid = id
     WHERE (team1='GER' OR team2='GER')
     AND (teamid != 'GER')
 
@@ -191,7 +191,7 @@ FROM game JOIN goal ON id = matchid
 GROUP BY stadium
 
 SELECT matchid, mdate, COUNT(*)
-  FROM game JOIN goal ON matchid = id 
+  FROM game JOIN goal ON matchid = id
  WHERE (team1 = 'POL' OR team2 = 'POL')
 GROUP BY matchid, mdate
 
@@ -200,3 +200,77 @@ FROM game JOIN goal ON id = matchid
 WHERE teamid = 'GER'
 GROUP BY matchid, mdate
 
+SELECT mdate,
+  team1,
+  SUM(CASE WHEN teamid=team1 THEN 1 ELSE 0 END) score1,
+  team2,
+  SUM(CASE WHEN teamid=team2 THEN 1 ELSE 0 END) score2
+  FROM game LEFT OUTER JOIN goal ON matchid = id
+  GROUP BY mdate, team1, team2
+  ORDER BY mdate, matchid, team1, team2
+
+----------------------------
+--		    More JOIN   	  --
+----------------------------
+
+SELECT id, title
+  FROM movie
+  WHERE yr=1962
+
+SELECT yr
+  FROM movie
+  WHERE title = 'Citizen Kane';
+
+SELECT id, title, yr
+	FROM movie
+	WHERE title LIKE '%Star Trek%';
+
+SELECT id
+  FROM actor
+  WHERE name = 'Glenn Close';
+
+SELECT id
+  FROM movie
+  WHERE title = 'Casablanca';
+
+SELECT DISTINCT actor.name
+  FROM movie
+  JOIN casting
+    ON movie.id=casting.movieid
+  JOIN actor
+    ON casting.actorid = actor.id
+  WHERE movie.id = 11768
+
+SELECT DISTINCT actor.name
+  FROM movie
+  JOIN casting
+    ON movie.id=casting.movieid
+  JOIN actor
+    ON casting.actorid = actor.id
+	WHERE movie.title = 'Alien';
+
+SELECT DISTINCT movie.title
+  FROM movie
+  JOIN casting
+    ON movie.id=casting.movieid
+  JOIN actor
+    ON casting.actorid = actor.id
+	WHERE actor.name = 'Harrison Ford';
+
+SELECT DISTINCT movie.title
+  FROM movie
+  JOIN casting
+    ON movie.id=casting.movieid
+  JOIN actor
+    ON casting.actorid = actor.id
+	WHERE actor.name = 'Harrison Ford'
+    AND casting.ord > 1;
+
+SELECT movie.title, actor.name
+  FROM movie
+  JOIN casting
+    ON movie.id=casting.movieid
+  JOIN actor
+    ON casting.actorid = actor.id
+WHERE movie.yr = 1962
+  AND casting.ord = 1;
