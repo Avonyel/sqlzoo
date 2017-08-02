@@ -274,3 +274,41 @@ SELECT movie.title, actor.name
     ON casting.actorid = actor.id
 WHERE movie.yr = 1962
   AND casting.ord = 1;
+
+SELECT
+    yr,
+    COUNT(title)
+  FROM movie
+  JOIN casting
+    ON movie.id=movieid
+  JOIN actor
+    ON actorid=actor.id
+  WHERE name='John Travolta'
+  GROUP BY yr
+  HAVING COUNT(title)=(
+    SELECT MAX(c) FROM (
+      SELECT yr,COUNT(title) AS c
+        FROM movie
+        JOIN casting
+          ON movie.id=movieid
+        JOIN actor
+          ON actorid=actor.id
+        WHERE name='John Travolta'
+        GROUP BY yr
+    ) AS t
+  )
+
+SELECT
+    movie.title,
+    actor.name 
+  FROM casting
+  JOIN movie
+    ON movie.id = casting.movieid
+  JOIN actor
+    ON actor.id = casting.actorid
+  WHERE movieid IN (
+    SELECT casting.movieid FROM actor
+      JOIN casting ON actor.id = casting.actorid
+      WHERE name='Julie Andrews'
+    )
+    AND casting.ord = 1;
