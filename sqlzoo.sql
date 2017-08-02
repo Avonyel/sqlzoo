@@ -300,7 +300,7 @@ SELECT
 
 SELECT
     movie.title,
-    actor.name 
+    actor.name
   FROM casting
   JOIN movie
     ON movie.id = casting.movieid
@@ -312,3 +312,10 @@ SELECT
       WHERE name='Julie Andrews'
     )
     AND casting.ord = 1;
+
+SELECT
+    actor.name
+  FROM casting
+  JOIN actor
+    ON actor.id = casting.actorid
+  WHERE SUM(CASE WHEN casting.ord=1 THEN 1 ELSE 0) >= 30
